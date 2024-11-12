@@ -50,7 +50,6 @@ public class CartController {
     @DeleteMapping
     public ResponseEntity<Void> deleteCarts(@RequestBody Map<String, List<Long>> request) {
         List<Long> cartIds = request.get("cartIds");
-
         // cartIds가 null이거나 빈 리스트인지 확인
         if (cartIds == null || cartIds.isEmpty()) {
             return ResponseEntity.badRequest().build();  // 요청이 잘못된 경우 400 Bad Request 반환

@@ -18,8 +18,13 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   private Long userId;
-   private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     private int quantity;
 
@@ -31,8 +36,8 @@ public class Cart {
     }
 
     public Cart(User user, Product product, int quantity) {
-        this.userId = user.getId();
-       this.productId = product.getId();
+        this.user = user;
+        this.product = product;
         this.quantity = quantity;
     }
 
