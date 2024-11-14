@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +28,12 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    public ResponseEntity<Cart> addCart(@RequestBody Map<String, Object> payload) {
-        Long userId = Long.valueOf(payload.get("userId").toString());
-        Long productId = Long.valueOf(payload.get("productId").toString());
-        int quantity = Integer.parseInt(payload.get("quantity").toString());
-
-        Cart createdCart = cartService.createCart(userId, productId, quantity);
-        return new ResponseEntity<>(createdCart, HttpStatus.CREATED);
+    public ResponseEntity<String> addCart(@RequestBody Map<String, Object> request) {
+        Long userId = ((Number) request.get("userId")).longValue();
+        Long productId = ((Number) request.get("productId")).longValue();
+        int quantity = ((Number) request.get("quantity")).intValue();
+        Cart cart = cartService.createCart(userId, productId, quantity);
+        return ResponseEntity.ok("Added cart successfully");
     }
 
     @GetMapping
@@ -46,16 +46,25 @@ public class CartController {
         }
         return ResponseEntity.ok(carts);
     }
-
     @DeleteMapping
-    public ResponseEntity<Void> deleteCarts(@RequestBody Map<String, List<Long>> request) {
+    public ResponseEntity<Map<String, Object>> deleteCarts(@RequestBody Map<String, List<Long>> request) {
         List<Long> cartIds = request.get("cartIds");
+
         // cartIds가 null이거나 빈 리스트인지 확인
         if (cartIds == null || cartIds.isEmpty()) {
-            return ResponseEntity.badRequest().build();  // 요청이 잘못된 경우 400 Bad Request 반환
+            return ResponseEntity.badRequest().body(Map.of("message", "삭제할 Cart ID가 없습니다."));
         }
 
+        // Cart 삭제
         cartRepository.deleteAllByIdInBatch(cartIds);
-        return ResponseEntity.noContent().build();
+
+        // 남은 Cart 목록 조회
+        List<Cart> remainingCarts = cartRepository.findAll();
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "선택한 Cart가 삭제되었습니다.");
+        response.put("remainingCarts", remainingCarts);
+        return ResponseEntity.ok(response);
     }
 }

@@ -3,42 +3,41 @@ package com.example.alomshop.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(nullable = false)
+    private Long productId;
 
+    @Column(nullable = false)
     private int quantity;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public Cart() {
-    }
-
-    public Cart(User user, Product product, int quantity) {
-        this.user = user;
-        this.product = product;
+    public Cart(Long userId, Long productId, int quantity) {
+        this.userId = userId;
+        this.productId = productId;
         this.quantity = quantity;
     }
 
+    public Cart() {
+    }
 }

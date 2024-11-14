@@ -3,6 +3,7 @@ package com.example.alomshop.service;
 import com.example.alomshop.domain.Cart;
 import com.example.alomshop.domain.Product;
 import com.example.alomshop.domain.User;
+import com.example.alomshop.dto.CartDTO;
 import com.example.alomshop.repository.CartRepository;
 import com.example.alomshop.repository.ProductRepository;
 import com.example.alomshop.repository.UserRepository;
@@ -30,7 +31,8 @@ public class CartService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Cart cart = new Cart(user, product, quantity);
+        CartDTO cartDTO = new CartDTO(user, product, quantity);
+        Cart cart = new Cart(cartDTO.getUserId(),cartDTO.getProductId(),cartDTO.getQuantity());
         return cartRepository.save(cart);
     }
 
