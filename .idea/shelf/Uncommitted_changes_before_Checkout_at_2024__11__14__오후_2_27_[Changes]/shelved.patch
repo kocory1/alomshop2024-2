@@ -1,0 +1,20 @@
+Index: alomshop/src/main/java/com/example/alomshop/controller/UserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.alomshop.controller;\n\nimport com.example.alomshop.domain.User;\nimport com.example.alomshop.repository.UserRepository;\nimport com.example.alomshop.service.UserService;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.*;\n\nimport java.util.Optional;\n\n@RestController\n@RequestMapping(\"/user\")\npublic class UserController {\n    private UserService userService;\n    private UserRepository userRepository;\n\n    @Autowired\n    public UserController(UserService userService, UserRepository userRepository) {\n        this.userService = userService;\n        this.userRepository = userRepository;\n    }\n\n    @PostMapping\n    public ResponseEntity<User> createUser(@RequestBody User user) {\n        User createdUser = userService.createUser(user);\n        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);\n    }\n\n    @GetMapping\n    public ResponseEntity<User> getUser(@RequestParam Long id) {\n        Optional<User> user = userRepository.findById(id);\n        return user.map(ResponseEntity::ok)\n                .orElseGet(() -> ResponseEntity.notFound().build());\n    }\n}\n
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/controller/UserController.java b/alomshop/src/main/java/com/example/alomshop/controller/UserController.java
+--- a/alomshop/src/main/java/com/example/alomshop/controller/UserController.java	(revision 040fbb8ad86524dafb5217554db7929ac3e1cf53)
++++ b/alomshop/src/main/java/com/example/alomshop/controller/UserController.java	(date 1731562068505)
+@@ -23,9 +23,9 @@
+     }
+ 
+     @PostMapping
+-    public ResponseEntity<User> createUser(@RequestBody User user) {
++    public ResponseEntity<String> createUser(@RequestBody User user) {
+         User createdUser = userService.createUser(user);
+-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
++        return new ResponseEntity<String>(HttpStatus.CREATED, body = "User Created");
+     }
+ 
+     @GetMapping

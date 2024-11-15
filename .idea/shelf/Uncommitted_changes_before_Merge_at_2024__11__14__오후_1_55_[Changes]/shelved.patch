@@ -1,0 +1,202 @@
+Index: alomshop/src/main/java/com/example/alomshop/Repository/ProductRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/Repository/ProductRepository.java b/alomshop/src/main/java/com/example/alomshop/Repository/ProductRepository.java
+deleted file mode 100644
+--- a/alomshop/src/main/java/com/example/alomshop/Repository/ProductRepository.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ /dev/null	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
+@@ -1,7 +0,0 @@
+-package com.example.alomshop.Repository;
+-
+-import com.example.alomshop.Entity.Product;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-
+-public interface ProductRepository extends JpaRepository<Product, Long> {
+-}
+\ No newline at end of file
+Index: alomshop/src/main/java/com/example/alomshop/Controller/ProductController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/Controller/ProductController.java b/alomshop/src/main/java/com/example/alomshop/Controller/ProductController.java
+deleted file mode 100644
+--- a/alomshop/src/main/java/com/example/alomshop/Controller/ProductController.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ /dev/null	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
+@@ -1,74 +0,0 @@
+-package com.example.alomshop.Controller;
+-
+-import com.example.alomshop.Dto.ProductRequestDto;
+-import com.example.alomshop.Entity.Product;
+-import com.example.alomshop.Entity.ProductCategory;
+-import com.example.alomshop.Repository.ProductCategoryRepository;
+-import com.example.alomshop.Repository.ProductRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-import java.util.List;
+-import java.util.Optional;
+-
+-@RestController
+-@RequestMapping("/product")
+-public class ProductController {
+-
+-    @Autowired
+-    private ProductRepository productRepository;
+-
+-    @Autowired
+-    private ProductCategoryRepository productCategoryRepository;
+-
+-    // 새 상품 추가
+-    @PostMapping
+-    public ResponseEntity<String> createProduct(@RequestBody ProductRequestDto productRequestDto) {
+-        // category_name으로 ProductCategory 찾기
+-        Optional<ProductCategory> categoryOptional = productCategoryRepository.findByCategoryName(productRequestDto.getCategory());
+-
+-        if (!categoryOptional.isPresent()) {
+-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category NAME");
+-        }
+-
+-        // 새로운 Product 객체 생성 및 설정
+-        Product product = new Product();
+-        product.setCategory(categoryOptional.get());
+-        product.setProductName(productRequestDto.getProductName());
+-        product.setDescription(productRequestDto.getDescription());
+-        product.setPrice(productRequestDto.getPrice());
+-        product.setStock(productRequestDto.getStock());
+-
+-        // Product 저장
+-        productRepository.save(product);
+-
+-        return ResponseEntity.status(HttpStatus.CREATED).body("Product created successfully");
+-    }
+-
+-    // 전체 상품 조회
+-    @GetMapping
+-    public List<Product> getAllProducts() {
+-        return productRepository.findAll();
+-    }
+-
+-    // 상품 ID로 조회
+-    @GetMapping("/{id}")
+-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+-        Optional<Product> product = productRepository.findById(id);
+-        return product.map(ResponseEntity::ok)
+-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+-    }
+-
+-    // 상품 삭제
+-    @DeleteMapping("/{id}")
+-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+-        if (productRepository.existsById(id)) {
+-            productRepository.deleteById(id);
+-            return ResponseEntity.noContent().build();
+-        } else {
+-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+-        }
+-    }
+-
+-}
+Index: alomshop/src/main/java/com/example/alomshop/domain/Product.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/domain/Product.java b/alomshop/src/main/java/com/example/alomshop/domain/Product.java
+deleted file mode 100644
+--- a/alomshop/src/main/java/com/example/alomshop/domain/Product.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ /dev/null	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
+@@ -1,19 +0,0 @@
+-package com.example.alomshop.domain;
+-
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import lombok.Getter;
+-import lombok.Setter;
+-
+-//임시
+-@Entity
+-@Getter
+-@Setter
+-public class Product {
+-    @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long id;
+-
+-}
+Index: alomshop/src/main/java/com/example/alomshop/service/ProductService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/service/ProductService.java b/alomshop/src/main/java/com/example/alomshop/service/ProductService.java
+deleted file mode 100644
+--- a/alomshop/src/main/java/com/example/alomshop/service/ProductService.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ /dev/null	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
+@@ -1,22 +0,0 @@
+-package com.example.alomshop.service;
+-
+-import com.example.alomshop.domain.Product;
+-import com.example.alomshop.domain.User;
+-import com.example.alomshop.repository.ProductRepository;
+-import com.example.alomshop.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-@Service
+-public class ProductService {
+-    private final ProductRepository productRepository;
+-
+-    @Autowired
+-    public ProductService(ProductRepository productRepository) {
+-        this.productRepository = productRepository;
+-    }
+-
+-    public Product createProduct(Product product) {
+-        return productRepository.save(product);
+-    }
+-}
+Index: alomshop/src/main/java/com/example/alomshop/service/CartService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.alomshop.service;\n\nimport com.example.alomshop.domain.Cart;\nimport com.example.alomshop.domain.Product;\nimport com.example.alomshop.domain.User;\nimport com.example.alomshop.repository.CartRepository;\nimport com.example.alomshop.repository.ProductRepository;\nimport com.example.alomshop.repository.UserRepository;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\n\nimport java.util.List;\n\n@Service\npublic class CartService {\n    private final CartRepository cartRepository;\n    private final ProductRepository productRepository;\n    private final UserRepository userRepository;\n\n    @Autowired\n    public CartService(CartRepository cartRepository, ProductRepository productRepository, UserRepository userRepository) {\n        this.cartRepository = cartRepository;\n        this.productRepository = productRepository;\n        this.userRepository = userRepository;\n    }\n\n    public Cart createCart(Long userId, Long productId, int quantity) {\n        User user = userRepository.findById(userId)\n                .orElseThrow(() -> new RuntimeException(\"User not found\"));\n        Product product = productRepository.findById(productId)\n                .orElseThrow(() -> new RuntimeException(\"Product not found\"));\n\n        Cart cart = new Cart(user, product, quantity);\n        return cartRepository.save(cart);\n    }\n\n    public List<Cart> getCartsByUserIdAndProductId(Long userId, Long productId) {\n        return cartRepository.findByUserIdAndProductId(userId, productId);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/service/CartService.java b/alomshop/src/main/java/com/example/alomshop/service/CartService.java
+--- a/alomshop/src/main/java/com/example/alomshop/service/CartService.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ b/alomshop/src/main/java/com/example/alomshop/service/CartService.java	(date 1731560119332)
+@@ -1,10 +1,8 @@
+ package com.example.alomshop.service;
+ 
+ import com.example.alomshop.domain.Cart;
+-import com.example.alomshop.domain.Product;
+ import com.example.alomshop.domain.User;
+ import com.example.alomshop.repository.CartRepository;
+-import com.example.alomshop.repository.ProductRepository;
+ import com.example.alomshop.repository.UserRepository;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+Index: alomshop/src/main/java/com/example/alomshop/controller/CartController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.alomshop.controller;\n\nimport com.example.alomshop.domain.Cart;\nimport com.example.alomshop.repository.CartRepository;\nimport com.example.alomshop.repository.ProductRepository;\nimport com.example.alomshop.repository.UserRepository;\nimport com.example.alomshop.service.CartService;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.*;\n\nimport java.util.List;\nimport java.util.Map;\n\n@RestController\n@RequestMapping(\"/cart\")\npublic class CartController {\n\n    @Autowired\n    private CartRepository cartRepository;\n    @Autowired\n    private UserRepository userRepository;\n    @Autowired\n    private ProductRepository productRepository;\n    @Autowired\n    private CartService cartService;\n\n    @PostMapping\n    public ResponseEntity<Cart> addCart(@RequestBody Map<String, Object> payload) {\n        Long userId = Long.valueOf(payload.get(\"userId\").toString());\n        Long productId = Long.valueOf(payload.get(\"productId\").toString());\n        int quantity = Integer.parseInt(payload.get(\"quantity\").toString());\n\n        Cart createdCart = cartService.createCart(userId, productId, quantity);\n        return new ResponseEntity<>(createdCart, HttpStatus.CREATED);\n    }\n\n    @GetMapping\n    public ResponseEntity<List<Cart>> getCartsByUserIdAndProductId(\n            @RequestParam(\"user_id\") Long userId,\n            @RequestParam(\"product_id\") Long productId) {\n        List<Cart> carts = cartService.getCartsByUserIdAndProductId(userId, productId);\n        if (carts.isEmpty()) {\n            return ResponseEntity.notFound().build();\n        }\n        return ResponseEntity.ok(carts);\n    }\n\n    @DeleteMapping\n    public ResponseEntity<Void> deleteCarts(@RequestBody Map<String, List<Long>> request) {\n        List<Long> cartIds = request.get(\"cartIds\");\n        // cartIds가 null이거나 빈 리스트인지 확인\n        if (cartIds == null || cartIds.isEmpty()) {\n            return ResponseEntity.badRequest().build();  // 요청이 잘못된 경우 400 Bad Request 반환\n        }\n\n        cartRepository.deleteAllByIdInBatch(cartIds);\n        return ResponseEntity.noContent().build();\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/controller/CartController.java b/alomshop/src/main/java/com/example/alomshop/controller/CartController.java
+--- a/alomshop/src/main/java/com/example/alomshop/controller/CartController.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ b/alomshop/src/main/java/com/example/alomshop/controller/CartController.java	(date 1731560119330)
+@@ -2,7 +2,6 @@
+ 
+ import com.example.alomshop.domain.Cart;
+ import com.example.alomshop.repository.CartRepository;
+-import com.example.alomshop.repository.ProductRepository;
+ import com.example.alomshop.repository.UserRepository;
+ import com.example.alomshop.service.CartService;
+ import org.springframework.beans.factory.annotation.Autowired;

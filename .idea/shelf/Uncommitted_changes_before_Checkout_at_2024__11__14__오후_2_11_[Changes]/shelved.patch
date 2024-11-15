@@ -1,0 +1,19 @@
+Index: alomshop/src/main/java/com/example/alomshop/repository/ProductRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.alomshop.Repository;\n\nimport com.example.alomshop.Entity.Product;\nimport org.springframework.data.jpa.repository.JpaRepository;\n\npublic interface ProductRepository extends JpaRepository<Product, Long> {\n}
+===================================================================
+diff --git a/alomshop/src/main/java/com/example/alomshop/repository/ProductRepository.java b/alomshop/src/main/java/com/example/alomshop/repository/ProductRepository.java
+--- a/alomshop/src/main/java/com/example/alomshop/repository/ProductRepository.java	(revision c40b37c0827fea23ba6b1c063a73ee206c110674)
++++ b/alomshop/src/main/java/com/example/alomshop/repository/ProductRepository.java	(date 1731561007022)
+@@ -1,7 +1,8 @@
+-package com.example.alomshop.Repository;
++package com.example.alomshop.repository;
+ 
+ import com.example.alomshop.Entity.Product;
+ import org.springframework.data.jpa.repository.JpaRepository;
+ 
+ public interface ProductRepository extends JpaRepository<Product, Long> {
++
+ }
+\ No newline at end of file
