@@ -19,6 +19,9 @@ spring:
         highlight_sql: true
     defer-datasource-initialization: true
 
+  jwt:
+    secret: minsuminsusususuusususuussupernovavavavavavavavava
+
 logging:
   level:
     org.hibernate.SQL: debug

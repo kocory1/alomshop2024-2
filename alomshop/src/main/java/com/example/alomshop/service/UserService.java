@@ -31,7 +31,13 @@ public class UserService {
             return;
         }
 
-        User userData = new User(username,email,encodedPassword,age);
+        User userData = new User();
+        userData.setUsername(username);
+        userData.setPassword(encodedPassword);
+        userData.setEmail(email);
+        userData.setAge(age);
+        userData.setRole("ROLE_USER");
+
 
         userRepository.save(userData);
 

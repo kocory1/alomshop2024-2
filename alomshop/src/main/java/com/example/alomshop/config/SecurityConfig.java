@@ -1,10 +1,10 @@
 package com.example.alomshop.config;
 
+import com.example.alomshop.jwt.JWTUtil;
 import com.example.alomshop.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,53 +18,53 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
+    //JWTUtil 주입
+    private final JWTUtil jwtUtil;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+
         this.authenticationConfiguration = authenticationConfiguration;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        this.jwtUtil = jwtUtil;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //csrf disable
-        http
-                .csrf((auth)-> auth.disable());
 
-        //From login disable
         http
-                .formLogin((auth)-> auth.disable());
+                .csrf((auth) -> auth.disable());
 
-        //http basic login Authorization disable
         http
-                .httpBasic((auth)-> auth.disable());
+                .formLogin((auth) -> auth.disable());
 
-        //경로별 인가 작업
         http
-                .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login","/", "/user").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                .httpBasic((auth) -> auth.disable());
+
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login", "/", "/user").permitAll()
                         .anyRequest().authenticated());
 
-        //세션 설정
+        //AuthenticationManager()와 JWTUtil 인수 전달
         http
-                .sessionManagement((session)-> session
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
-
 }
