@@ -1,8 +1,8 @@
 package com.example.alomshop.service;
 
-import com.example.alomshop.domain.Cart;
-import com.example.alomshop.domain.Product;
-import com.example.alomshop.domain.User;
+import com.example.alomshop.entity.Cart;
+import com.example.alomshop.entity.Product;
+import com.example.alomshop.entity.User;
 import com.example.alomshop.dto.CartDTO;
 import com.example.alomshop.repository.CartRepository;
 import com.example.alomshop.repository.ProductRepository;

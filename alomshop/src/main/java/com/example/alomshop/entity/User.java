@@ -1,43 +1,48 @@
-package com.example.alomshop.domain;
+package com.example.alomshop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Cart {
+@EntityListeners(AuditingEntityListener.class)
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private String username;
+
+    private String role;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private Long productId;
+    private String password;
 
     @Column(nullable = false)
-    private int quantity;
+    private int age;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public Cart(Long userId, Long productId, int quantity) {
-        this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
+
+    public User() {
     }
 
-    public Cart() {
+    public User(String username, String email, String password, int age) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.age = age;
     }
 }

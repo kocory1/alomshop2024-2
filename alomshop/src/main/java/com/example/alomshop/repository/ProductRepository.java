@@ -1,6 +1,6 @@
 package com.example.alomshop.repository;
 
-import com.example.alomshop.domain.Product;
+import com.example.alomshop.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

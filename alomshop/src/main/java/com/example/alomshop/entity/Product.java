@@ -1,4 +1,4 @@
-package com.example.alomshop.domain;
+package com.example.alomshop.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
