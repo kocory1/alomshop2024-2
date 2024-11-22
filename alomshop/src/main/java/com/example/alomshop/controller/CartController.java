@@ -1,12 +1,11 @@
 package com.example.alomshop.controller;
 
-import com.example.alomshop.domain.Cart;
+import com.example.alomshop.entity.Cart;
 import com.example.alomshop.repository.CartRepository;
 import com.example.alomshop.repository.ProductRepository;
 import com.example.alomshop.repository.UserRepository;
 import com.example.alomshop.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

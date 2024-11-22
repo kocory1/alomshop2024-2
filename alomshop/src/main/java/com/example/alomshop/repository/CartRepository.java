@@ -1,6 +1,6 @@
 package com.example.alomshop.repository;
 
-import com.example.alomshop.domain.Cart;
+import com.example.alomshop.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

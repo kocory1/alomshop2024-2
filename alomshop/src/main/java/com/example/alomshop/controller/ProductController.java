@@ -1,7 +1,6 @@
 package com.example.alomshop.controller;
 
-import com.example.alomshop.domain.Product;
-import com.example.alomshop.domain.User;
+import com.example.alomshop.entity.Product;
 import com.example.alomshop.repository.ProductRepository;
 import com.example.alomshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

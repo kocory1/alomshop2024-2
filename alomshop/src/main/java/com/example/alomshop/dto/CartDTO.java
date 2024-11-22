@@ -1,7 +1,7 @@
 package com.example.alomshop.dto;
 
-import com.example.alomshop.domain.Product;
-import com.example.alomshop.domain.User;
+import com.example.alomshop.entity.Product;
+import com.example.alomshop.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
