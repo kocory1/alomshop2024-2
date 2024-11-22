@@ -1,8 +1,10 @@
 package com.example.alomshop.controller;
 
 import com.example.alomshop.dto.UserDTO;
+import com.example.alomshop.entity.User;
 import com.example.alomshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,10 +23,8 @@ public class UserController {
         return "good";
     }
 
-//    @GetMapping
-//    public ResponseEntity<User> getUser(@RequestParam Long id) {
-//        Optional<User> user = userRepository.findById(id);
-//        return user.map(ResponseEntity::ok)
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+    @GetMapping()
+    public User adminP() {
+        return userService.getUser();
+    }
 }

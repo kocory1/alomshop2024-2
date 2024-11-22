@@ -43,6 +43,12 @@ public class UserService {
 
     }
 
+    public User getUser() {
+        User user = new User();
+        user = userRepository.findByUsername("admin");
+        return user;
+    }
+
 
 }
 
